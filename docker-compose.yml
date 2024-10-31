@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13           # Используем образ PostgreSQL
+    environment:
+      POSTGRES_DB: blog_db       # Название БД
+      POSTGRES_USER: blog_user    # Имя пользователя
+      POSTGRES_PASSWORD: password  # Пароль пользователя
+    ports:
+      - "5434:5432"               # Открываем порт для PostgreSQL
+    volumes:
+      - db_data:/var/lib/postgresql/data # Для сохранения данных между перезапусками
+    restart: always               # Автоматический перезапуск контейнера
+
+  web:
+    build: .                      # Собираем образ из Dockerfile в текущей директории
+    command: python manage.py runserver 0.0.0.0:8000  # Запускаем сервер Django
+    volumes:
+      - .:/app                    # Монтируем текущую директорию в контейнер
+    ports:
+      - "8001:8000"              # Открываем порт для Django
+    depends_on:
+      - db                        # Указываем, что web-зависит от db
+    restart: always               # Автоматический перезапуск контейнера
+
+volumes:
+  db_data:                        # Объем для сохранения данных базы данных
