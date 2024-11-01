@@ -93,7 +93,22 @@ docker-compose --version
 cd blog_api
 
 
-# docker-compose up --build
+Вход в консоль PostgreSQL (введите свой пароль при необходимости)
+# sudo -u postgres psql
+
+Создание новой базы данных
+# CREATE DATABASE blog_db;
+
+Создание пользователя с паролем (замените "password" на ваш пароль)
+# CREATE USER blog_user WITH PASSWORD 'password';
+
+ Предоставление прав пользователю на базу данных
+# GRANT ALL PRIVILEGES ON DATABASE blog_db TO blog_user;
+
+ Выход из PostgreSQL
+# \q
+
+docker-compose up --build
 
 
 docker-compose exec web python manage.py migrate
@@ -103,7 +118,7 @@ docker-compose exec web python manage.py createsuperuser
 
 
 
-docker-compose up --build
+# docker-compose up --build
 
 
 
